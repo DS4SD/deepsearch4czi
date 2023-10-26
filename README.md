@@ -10,6 +10,24 @@ deepsearch profile config --profile-name "ds-experience" --host "https://deepsea
 
 ## Running
 
+To convert PDF documents in the folder `data`, 
+
+```sh
+poetry run python ./ds4czi/convert_pdfs.py -i ./data
+```
+
+To search and download articles (mentioning "Yolov5") in the Arxiv and storing them in folder `./data/Yolov5`,
+
+```sh
+poetry run python ./ds4czi/search_articles.py -i arxiv -q Yolov5 -o ./data/Yolov5
+```
+
+To extract software mentions from a set of converted documents,
+
+```sh
+poetry run python ./ds4czi/extract_software.py -i ./data/Yolov5/arxiv/json/
+```
+
 ## About this project
 
 This repository was developed as part of the [Mapping the Impact of Research Software in Science](https://github.com/chanzuckerberg/software-impact-hackathon-2023) hackathon hosted by the Chan Zuckerberg Initiative (CZI). By participating in this hackathon, owners of this repository acknowledge the following:
