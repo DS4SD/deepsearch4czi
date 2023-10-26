@@ -10,7 +10,8 @@ readme = "README.md"
 python = "^3.11"
 deepsearch-toolkit = "^0.31.0"
 pandas = "2.0.3"
-deepsearch-glm = "^0.5.2"
+deepsearch-glm = "0.5.3"
+matplotlib = "^3.8.0"
 
 
 [build-system]

@@ -348,15 +348,15 @@ tests = ["pytest", "pytest-cov", "pytest-xdist"]
 
 [[package]]
 name = "deepsearch-glm"
-version = "0.5.2"
+version = "0.5.3"
 description = "Graph Language Models"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "deepsearch_glm-0.5.2-cp310-cp310-macosx_12_0_x86_64.whl", hash = "sha256:f9f68a127ceeb017afabcfcda67697c208f25ee52a122c5aa4c2d8ebd26a8d52"},
-    {file = "deepsearch_glm-0.5.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:99039be72f60bfa50340acf68335cfbde1875cbe1de4906a1b6fc63168e6aae7"},
-    {file = "deepsearch_glm-0.5.2-cp311-cp311-macosx_12_0_x86_64.whl", hash = "sha256:77b5f190b4bb35cde4f8d862d6a78603b71dbc56de56dddc471b201accd2e06d"},
-    {file = "deepsearch_glm-0.5.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a7ba55fc9b1869aea1d1e8aa71930b33d7f66b5140fc969e641336f591891e28"},
+    {file = "deepsearch_glm-0.5.3-cp310-cp310-macosx_12_0_x86_64.whl", hash = "sha256:f8221cac7583091bd402d8e22874d6b59a1d299d0aaeda4d4278712d9d1d2570"},
+    {file = "deepsearch_glm-0.5.3-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:02b4c6b038692710920e512d1099c66fca164dd690283111a28a0e2203bc77f4"},
+    {file = "deepsearch_glm-0.5.3-cp311-cp311-macosx_12_0_x86_64.whl", hash = "sha256:5c23aeb9998da2440c10c6f63cae996958ee1d32c74919b06c151cf06548e2a7"},
+    {file = "deepsearch_glm-0.5.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:16a657cd8df6777fe56fc031f6f4ea9da32cb46534605ecab08be40b2cbc1d23"},
 ]
 
 [package.dependencies]
@@ -1469,4 +1469,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "741c081b0e29f7ab3a30b1c61f2a4be93135c313954312d0a1b4aeec915eeaf3"
+content-hash = "1bf7efffce2c8e7a3126751fd717d6501a444f5226d03b837e3a5a9d04141279"

@@ -262,7 +262,7 @@ def download_docs(api, index, query, chunk_size, odir, jodir):
                 #"api": api
             })
 
-        with ProcessPoolExecutor(max_workers=8) as executor:
+        with ProcessPoolExecutor(max_workers=16) as executor:
             results = executor.map(retrieve_doc_in_parallel, tasks)
     
 if __name__=="__main__":

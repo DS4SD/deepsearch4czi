@@ -13,6 +13,8 @@ import pandas as pd
 import argparse
 import subprocess
 
+import matplotlib.pyplot as plt
+
 from tabulate import tabulate
 
 from concurrent.futures import ProcessPoolExecutor
@@ -55,47 +57,154 @@ def parse_arguments():
 
     return idir, ifiles
 
-def process_docs(idir, ifiles):
+def annotate_doc(ifile):
 
-    load_pretrained_nlp_models(force=False, verbose=True)
-    #mdl = init_nlp_model("link;reference")
-    mdl = init_nlp_model("link;reference")
+    if ifile.endswith(".nlp.json"):
+        return
+        
+    mdl = init_nlp_model("link")
+    
+    with open(ifile, "r") as fr:
+        doc = json.load(fr)
 
+    enriched_doc = mdl.apply_on_doc(doc)
+        
+    ofile = ifile.replace(".json", ".nlp.json")
+    with open(ofile, "w") as fw:
+        fw.write(json.dumps(enriched_doc))                    
+
+def process_all_docs(idir, ifiles):
+
+    processed=[]
+    tasks=[]
+
+    sfiles = set(ifiles)
+    
+    for ifile in ifiles:
+
+        if ifile.endswith(".nlp.json"):
+            processed.append(ifile)
+            continue
+        else:
+            ofile = ifile.replace(".json", ".nlp.json")
+
+            if ofile not in sfiles:
+                tasks.append(ifile)
+                processed.append(ofile)
+                
+    if len(tasks)==0:
+        return processed
+
+    print("#-tasks: ", len(tasks))
+    
+    with ProcessPoolExecutor(max_workers=12) as executor:
+        results = executor.map(annotate_doc, tasks)
+
+    return processed
+        
+def extract_links(idir, ifiles):
+
+    ofile = os.path.join(idir, "links.csv")
+    print("dataframe: ", ofile)
+
+
+    if os.path.exists(ofile):
+        df = pd.read_csv(ofile)
+        return df
+
+
+    
     links=[]
     
     for ifile in tqdm.tqdm(ifiles):
 
-        print(f"analysing {ifile}")
-        with open(ifile, "r") as fr:
-            doc = json.load(fr)
-
-        enriched_doc = mdl.apply_on_doc(doc)
-
+        try:
+            with open(ifile, "r") as fr:
+                enriched_doc = json.load(fr)
+        except:
+            continue
+        
         insts = enriched_doc["instances"]
-
+                
         headers = insts["headers"]
-        links += insts["data"]
 
+        for row in insts["data"]:
+            name = row[headers.index("name")]
+
+            for _ in [",", "/", "/issues"]:
+                if name.endswith(_):
+                    name = name[:-len(_)]
+
+            row[headers.index("name")] = name
+                    
+            links.append(row)
+        
+        """
         df = pd.DataFrame(insts["data"], columns=insts["headers"])
         #print(df)
         
         titles = df[(("reference"==df["type"]) & ("title"==df["subtype"]))]
         print(titles)
-        
+        """
         
     df = pd.DataFrame(links, columns=insts["headers"])
+    df.to_csv(ofile)
+
     print(df)
 
-    for i,row in df.iterrows():
-        if re.match("https://github.com/.+", row["name"]):
-            print(row["name"])
+    return df
+
+def extract_github(df):
+
+    print(df)
     
+    result = df['name'].str.contains("https://github.com/.+", regex=True)
+    github = df[result]
+    print(github)
+
+    hist = github["name"].value_counts()
+    print(hist)
+
+    table=[]
+    
+    x=[]
+    y=[]
+    l=[]
+    i=1
+    for key,val in hist.items():
+        print(key, "\t", val)
+        x.append(i)
+        l.append(key)
+        y.append(val)
+
+        i += 1
+
+        table.append([val, key])
         
+        if i>20:
+            break
+
+    print("\n\n bare results: \n")
+        
+    print(tabulate(table, headers=["count", "link"]))
+
+    print("\n\n")
+    
+    fig = plt.figure(1)
+    plt.semilogy(x,y)
+    plt.show()
+
+    
+    
 if __name__=="__main__":
 
     idir, ifiles = parse_arguments()
 
     print(f"pdf-dir: {idir}")
-    print(f"pdf-files: {ifiles}")
+    print(f"#-files: {len(ifiles)}")
     
-    process_docs(idir, ifiles)
+    ofiles = process_all_docs(idir, ifiles)
+    
+    df = extract_links(idir, ofiles)
+
+    extract_github(df)
