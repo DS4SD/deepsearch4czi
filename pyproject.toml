@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "deepsearch4czi"
+version = "0.1.0"
+description = ""
+authors = ["Peter Staar <taa@zurich.ibm.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+deepsearch-toolkit = "^0.31.0"
+pandas = "2.0.3"
+deepsearch-glm = "^0.5.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
